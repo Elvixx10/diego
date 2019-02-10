@@ -2,6 +2,7 @@
   const menu = d.getElementById("showmenu"),
     menuContainer = d.getElementById("menu-container"),
     menuAcordeon = d.getElementById('menu-acordeon'),
+    alert_text = 'Faltan visualizar algunas presentaciones!!';
     text_menu = new Array(
       //['#/','#/'],
       ['#/5','#/6/6'],
@@ -95,7 +96,7 @@
           (e.target.className=='navigate-right highlight enabled' || e.target.className=="navigate-right highlight enabled")
           )
         ) {
-          alert('Flatan visualizar algunas presentaciones!!');
+          alert(alert_text);
           location.href = path;
           return false;
         }
@@ -197,7 +198,7 @@
         }
 
         if(block && (e.code=='ArrowRight' || e.code == "ArrowRight") ) {
-          alert('Flatan visualizar algunas presentaciones!!');
+          alert(alert_text);
           location.href = path;
           return false;
         }
