@@ -8,10 +8,10 @@
       ['#/5','#/6/6'],
       ['#/7','#/8/12'],
       ['#/9','#/11','label-icon-1'],
-      ['#/15','#/17/6'],
+      ['#/15','#/18/6'],
       ['#/22','#/28'],
       ['#/29','#/31'],
-      ['#/32','#/34/11','label-icon-2'],
+      ['#/32','#/35/11','label-icon-2'],
       ['#/39','#/52'],
       ['#/53','#/55'],
       ['#/55','#/62'],
@@ -46,6 +46,15 @@
 
 
   d.addEventListener('click', (e) => {
+    if( e.explicitOriginalTarget.nodeValue == "Volver" || e.explicitOriginalTarget.nodeValue== 'Volver'){
+      c("Botón de regresar a un indice superior")
+    }
+
+    c(e.target)
+    //span
+    //img
+    //p
+
     if( e.target.nodeName === "BUTTON" || e.target.nodeName == 'BUTTON') {
       let url = location.href,
       dataObject = [];
@@ -151,6 +160,124 @@
     }
 
   });
+
+  //TODO: movil
+  d.addEventListener('touchend', function(e){
+    //c(e.path[1])c(e.path[1].nodeName)c(e.path[1].className)
+    //navigate-right enabled
+    //navigate-down enabled
+    //navigate-down
+    if( e.path[1].nodeName === "BUTTON" || e.path[1].nodeName == 'BUTTON') {
+      let url = location.href,
+      dataObject = [];
+
+      if (ls.getItem('dataObject') && ls.getItem('dataObject').length > 0) {
+          dataObject = JSON.parse(ls.getItem('dataObject'));
+      }
+      c(e.target.className)
+
+      //TODO: nuevo
+      if(
+        (e.path[1].className=='navigate-right enabled' || e.path[1].className == "navigate-right enabled") ||
+        (e.path[1].className=='navigate-right highlight enabled' || e.path[1].className=="navigate-right highlight enabled") ||
+        (e.path[1].className=='navigate-down enabled' || e.path[1].className == "navigate-down enabled") ||
+        (e.path[1].className=='navigate-down' || e.path[1].className=="navigate-down")
+      ){
+        let present =  d.querySelector('section.present')
+        , has_data_id = present.getAttribute('data-id')
+        , data_previous_indexv = present.getAttribute('data-previous-indexv')
+        , count_previous_indexv = present.querySelectorAll('section');
+
+        /*c(present)
+        c(has_data_id)
+        c(data_previous_indexv)
+        c(count_previous_indexv)
+        return false;*/
+
+        let block = false;
+        let path = null;
+        let _ok = false;
+        for(var i in dataObject ) {
+          if(dataObject[i].previous == url){
+            dataObject[i].previous_view=true;
+            _ok = true;
+            ls.removeItem("dataObject");
+            break;
+          }
+
+          if(!dataObject[i].previous_view && !_ok) {
+            path = ls.getItem('url');
+            block = true;
+            break;
+          }
+        }
+        //c(path)
+
+        if(_ok) {
+          ls.setItem('dataObject', JSON.stringify(dataObject));
+          //c(dataObject)
+        }
+
+        if(block && (
+          (e.path[1].className=='navigate-right enabled' || e.path[1].className == "navigate-right enabled") ||
+          (e.path[1].className=='navigate-right highlight enabled' || e.path[1].className=="navigate-right highlight enabled")
+          )
+        ) {
+          alert(alert_text);
+          location.href = path;
+          return false;
+        }
+
+        let searching_between_url = ( dataObject.find(el => el.url === url) ? true : false);
+        if( !searching_between_url && (
+          (e.path[1].className=='navigate-right enabled' || e.path[1].className == "navigate-right enabled" ) ||
+          (e.path[1].className=='navigate-right highlight enabled' || e.path[1].className=="navigate-right highlight enabled")
+          )
+        ) {
+          //c("Solo arrowrigth y no existente")
+          let replace_url = url;
+          let object_local = {
+              url: url,
+              view: true,
+              section_id:has_data_id,
+              data_previous:data_previous_indexv,
+              previous: (parseInt(count_previous_indexv.length) > 1) ? replace_url+='/'+parseInt(count_previous_indexv.length-1) : 0,
+              previous_view: (parseInt(count_previous_indexv.length) > 1) ? false : true
+          }
+
+          dataObject.push(object_local);
+          ls.setItem('dataObject', JSON.stringify(dataObject));
+          //c(dataObject)
+        }
+
+        //TODO: obteniendo listado de vistas a nivel general
+        if (ls.getItem('url_save') && ls.getItem('url_save').length > 0) {
+            url_save = JSON.parse(ls.getItem('url_save'));
+        }
+        //c(url_save)
+        let _switch = false;
+        for(var i in url_save) {
+          if(url_save[i] == url) {
+            _switch = true;
+          }
+        }
+
+        //c(_switch)
+
+        if(!_switch) {
+          url_obj=url;
+          url_save.push(url_obj);
+          ls.setItem('url_save', JSON.stringify(url_save));
+          ls.setItem("url", url);
+          draw(url, 'a');
+        }
+        //c(ls.url)
+        //TODO: end obteniendo listado de vistas a nivel general
+      }
+      //TODO: end nuevo
+
+    }
+  }, false);
 
   d.addEventListener('keyup', (e) => {
     if( e.keyCode == '37' || e.keyCode == '38' || e.keyCode == '39' || e.keyCode == '40' ) {
@@ -352,8 +479,9 @@
   d.querySelector('body').setAttribute('oncopy', 'return false;');
   totalCurso();
 
+
   w.addEventListener('hashchange', (e) => {
-      w.location.href = ls.url;
+    //w.location.href = ls.url;
   });
 
 })(document, window, console.log, localStorage);
