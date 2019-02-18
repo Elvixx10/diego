@@ -6,10 +6,10 @@
       parallaxBackgroundVertical: null,
     };
     
-    /*if (/Edge\/\d./i.test(navigator.userAgent)){window.alert('Microsoft Edge');}*/
     if (/MSIE 9/i.test(navigator.userAgent) ||
     /rv:11.0/i.test(navigator.userAgent) ||
-    /MSIE 10/i.test(navigator.userAgent)
+    /MSIE 10/i.test(navigator.userAgent) /*||
+    /Edge\/\d./i.test(navigator.userAgent)*/
     ) {
       reveal_configure.keyboard = {
         32: null,
@@ -34,29 +34,44 @@
     var menu = d.getElementById("showmenu"),
       menuContainer = d.getElementById("menu-container"),
       menuAcordeon = d.getElementById('menu-acordeon'),
-      alert_text = 'Aún no has completado todo el contenido, ¿Estás seguro de que quieres continuar?';
+      alert_text = 'Aún no has completado todo el contenido, ¿Estás seguro de que quieres continuar?',
       text_menu = new Array(
         //['#/','#/'],
-        ['#/5', '#/6/6'],
-        ['#/7', '#/8/12'],
-        ['#/9', '#/11', 'label-icon-1'],
-        ['#/15', '#/18/6'],
-        ['#/22', '#/28'],
-        ['#/29', '#/31'],
-        ['#/32', '#/35/11', 'label-icon-2'],
-        ['#/39', '#/52'],
-        ['#/53', '#/55'],
-        ['#/55', '#/62'],
-        ['#/63', '#/66', 'label-icon-3'],
-        ['#/69', '#/74'],
-        ['#/75', '#/91'],
-        ['#/92', '#/95', 'label-icon-4'],
-        ['#/97', '#/97', 'label-icon-5']
+        // 1.1
+        ['#/5','#/6/6'],
+        //1.2
+        ['#/7','#/8/12'],
+        // 1.3
+        ['#/9','#/10','label-icon-1'],
+        // 2.1
+        ['#/16','#/22'],
+        // 2.2
+        ['#/23','#/29'],
+        // 2.3
+        ['#/30','#/31'],
+        // 2.4
+        ['#/33','#/37','label-icon-2'],
+        // 3.1
+        ['#/40','#/54'],
+        // 3.2
+        ['#/55','#/56'],
+        // 3.3
+        ['#/57','#/65'],
+        // 3.4
+        ['#/66','#/67','label-icon-3'],
+        // 4.1
+        ['#/72','#/77'],
+        // 4.2
+        ['#/78','#/94'],
+        // 4.3
+        ['#/95','#/96','label-icon-4'],
+        // 5
+        ['#/99','#/99','label-icon-5']
       ),
       url_save = [],
       url_obj = {},
       draw_save = [],
-      draw_obj = {}
+      draw_obj = {},
       label_save = [],
       label_obj = {};
   
@@ -834,7 +849,7 @@
     removedisabled = function(href) {
       c(href)
       var element = w.location.href+href;
-  
+  c(element)
       if (ls.getItem('url_save') && ls.getItem('url_save').length > 0) {
         url_save = JSON.parse(ls.getItem('url_save'));
       }
@@ -885,7 +900,7 @@
     }
   
     w.addEventListener('hashchange', function(e) {
-      dataObject = [];
+      var dataObject = [];
       var _ok = false;
   
       if (ls.getItem('dataObject') && ls.getItem('dataObject').length > 0) {
