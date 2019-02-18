@@ -1,14 +1,25 @@
 //https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
 (function(d, w, c, ls) {
-
-    Reveal.configure({
+    var reveal_configure = {
       touch: false,
       parallaxBackgroundHorizontal: null,
       parallaxBackgroundVertical: null,
-      keyboard: {
-        32: null
-      }
-    });
+    };
+    
+    /*if (/Edge\/\d./i.test(navigator.userAgent)){window.alert('Microsoft Edge');}*/
+    if (/MSIE 9/i.test(navigator.userAgent) ||
+    /rv:11.0/i.test(navigator.userAgent) ||
+    /MSIE 10/i.test(navigator.userAgent)
+    ) {
+      reveal_configure.keyboard = {
+        32: null,
+        37:null,
+        38:null,
+        39:null,
+        40:null
+      };
+    }
+    Reveal.configure(reveal_configure);
   
     Reveal.addEventListener( 'init', function( event ) {
       var edge = d.getElementById('edge');
@@ -29,10 +40,10 @@
         ['#/5', '#/6/6'],
         ['#/7', '#/8/12'],
         ['#/9', '#/11', 'label-icon-1'],
-        ['#/15', '#/17/6'],
+        ['#/15', '#/18/6'],
         ['#/22', '#/28'],
         ['#/29', '#/31'],
-        ['#/32', '#/34/11', 'label-icon-2'],
+        ['#/32', '#/35/11', 'label-icon-2'],
         ['#/39', '#/52'],
         ['#/53', '#/55'],
         ['#/55', '#/62'],
@@ -67,17 +78,22 @@
   
     //TODO: /////////////////////////////////////////
     d.addEventListener('click', function(e) {
+      c(e)
+
       //c(e.target.nodeName)
       //c(e.target.nodeName)
       if ((e.target.nodeName === "BUTTON" || e.target.nodeName == 'BUTTON') ||
         (e.target.nodeName === "DIV" || e.target.nodeName == 'DIV')
       ) {
-        var url = location.href,
-          dataObject = [];
-  
+        var url = location.href;
+        var dataObject = new Array();
+  c(url)
+  c(dataObject)
+  c(w.dataObject)
         if (ls.getItem('dataObject') && ls.getItem('dataObject').length > 0) {
           dataObject = JSON.parse(ls.getItem('dataObject'));
         }
+        c(dataObject)
   
         if (ls.getItem('url_save') && ls.getItem('url_save').length > 0) {
           url_save = JSON.parse(ls.getItem('url_save'));
@@ -97,6 +113,7 @@
         //c(_switch)
         //c(e.target.className)
         //c(e.target.parentNode.className)
+        c(dataObject)
         if (
           (
             (e.target.className == 'navigate-right enabled' || e.target.className == "navigate-right enabled") ||
@@ -243,7 +260,8 @@
         if (ls.getItem('url_save') && ls.getItem('url_save').length > 0) {
           url_save = JSON.parse(ls.getItem('url_save'));
         }
-  
+        //c(dataObject)
+        //c(url_save)
         var _switch = false;
         for (var i in url_save) {
           if (url_save[i] == url) {
@@ -265,6 +283,7 @@
           (e.key == 'Right'  || e.key == "Right" ) ||
           (e.key== 'Down' || e.key== "Down")
         ) {
+          //c("Entrado----")
           var present = d.querySelector('section.present')
             , has_data_id = present.getAttribute('data-id')
             , data_previous_indexv = present.getAttribute('data-previous-indexv')
@@ -275,9 +294,11 @@
           var _ok = false;
           c(dataObject)
           for (var i in dataObject) {
+            c(dataObject[i].menu.length)
             if(dataObject[i].menu.length > 0){
               var menu = dataObject[i].menu;
               for(var _i in menu) {
+                c(menu[_i].previous, url)
                 if (menu[_i].previous == url) {
                   menu[_i].previous_view = true;
                   _ok = true;
@@ -298,11 +319,14 @@
               }
             }
           }
-  
+          
+          c(_ok)
           if (_ok) {
             ls.setItem('dataObject', JSON.stringify(dataObject));
           }
-          c(block)
+          c(dataObject)
+          //c(block)
+
           if (block && (
             (e.code == 'ArrowRight' || e.code == "ArrowRight") ||
             (e.key == 'ArrowRight' || e.key == "ArrowRight")  || 
@@ -328,6 +352,7 @@
               }
             }
           }
+          //c(searching_between_url)
           if (!searching_between_url && (
             (e.code == 'ArrowRight' || e.code == "ArrowRight") ||
             (e.key == 'ArrowRight' || e.key == "ArrowRight") ||
